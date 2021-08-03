@@ -1,0 +1,9 @@
+extends base
+include mixins/video
+
+block content
+    h2 Trending Videos for You
+    each item in videos
+        +video(item)
+    else
+        li Sorry.. Nothing found.
