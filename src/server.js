@@ -1,6 +1,6 @@
 import express from "express";
 import morgan from "morgan";
-import globalRouter from "./routers/globalRouters";
+import globalRouter from "./routers/rootRouters";
 import userRouter from "./routers/userRouters";
 import videoRouter from "./routers/videoRouters";
 
