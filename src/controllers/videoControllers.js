@@ -1,44 +1,12 @@
 import Video from "../models/Video";
 
-const fakeUser = {
-  username: "kdh",
-  loggedIn: false,
-};
-
-/*const videos = [
-  {
-    title: "1st video",
-    rating: 4.5,
-    comments: 2,
-    createdAt: "5 hours ago",
-    views: 321,
-    id: 1,
-  },
-  {
-    title: "2nd video",
-    rating: 4.5,
-    comments: 2,
-    createdAt: "5 hours ago",
-    views: 321,
-    id: 2,
-  },
-  {
-    title: "3rd video",
-    rating: 4.5,
-    comments: 2,
-    createdAt: "5 hours ago",
-    views: 321,
-    id: 3,
-  },
-];*/
-
 export const home = async (req, res) => {
   const videos = await Video.find({}).sort({ createdAt: "desc" });
-  return res.render("home", { pageTitle: "Home", fakeUser, videos });
+  return res.render("home", { pageTitle: "Home", videos });
 };
 
 export const getUpload = (req, res) => {
-  return res.render("upload", { pageTitle: "Upload Video", fakeUser });
+  return res.render("upload", { pageTitle: "Upload Video" });
 };
 
 export const postUpload = async (req, res) => {
@@ -53,7 +21,6 @@ export const postUpload = async (req, res) => {
   } catch (error) {
     return res.status(400).render("upload", {
       pageTitle: "Upload Video",
-      fakeUser,
       errorMessage: error._message,
     });
   }
@@ -67,7 +34,6 @@ export const watch = async (req, res) => {
   }
   return res.render("watch", {
     pageTitle: video.title,
-    fakeUser,
     video,
   });
 };
@@ -77,7 +43,6 @@ export const getEdit = async (req, res) => {
   const video = await Video.findById(id);
   return res.render("edit", {
     pageTitle: `Edit ${video.title}`,
-    fakeUser,
     video,
   });
 };
@@ -114,5 +79,5 @@ export const search = async (req, res) => {
       },
     });
   }
-  return res.render("search", { pageTitle: "Search", fakeUser, videos });
+  return res.render("search", { pageTitle: "Search", videos });
 };
