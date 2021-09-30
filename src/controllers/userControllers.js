@@ -145,8 +145,59 @@ export const getEdit = (req, res) => {
   res.render("edit-profile", { pageTitle: "Edit Profile" });
 };
 
-export const postEdit = (req, res) => {
-  res.render("edit-profile", { pageTitle: "Edit Profile" });
+export const postEdit = async (req, res) => {
+  const {
+    session: {
+      user: { _id, avatarUrl },
+    },
+    body: { name, email, username, location },
+    file,
+  } = req;
+  const updateUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      name,
+      email,
+      username,
+      location,
+      avatarUrl: file ? file.path : avatarUrl,
+    },
+    {
+      new: true,
+    }
+  );
+  req.session.user = updateUser;
+  return res.redirect("/user/edit");
+};
+
+export const getChangePassword = (req, res) => {
+  return res.render("change-password", { pageTitle: "Change password" });
+};
+export const postChangePassword = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { oldPassword, newPassword, newPassword2 },
+  } = req;
+  const user = await User.findById(_id);
+  const ok = await bcrypt.compare(oldPassword, user.password);
+  if (!ok) {
+    return res.status(400).render("change-password", {
+      pageTitle: "Change Password",
+      errorMessage: "Wrong password",
+    });
+  }
+  if (newPassword !== newPassword2) {
+    return res.status(400).render("change-password", {
+      pageTitle: "Change password",
+      errorMessage: "Password confirmation does not match.",
+    });
+  }
+  user.password = newPassword;
+  await user.save(); //save를 작동시켜야 bcrypt hash가 적용됨(userSchema.pre)
+  //send notification
+  return res.redirect("/user/logout");
 };
 
 export const see = (req, res) => res.send("see profile");
