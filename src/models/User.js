@@ -9,10 +9,12 @@ const userSchema = new mongoose.Schema({
   socialOnly: { type: Boolean, default: false },
   password: { type: String, required: false },
   location: String,
+  videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }],
 });
 
 userSchema.pre("save", async function () {
-  this.password = await bcrypt.hash(this.password, 4);
+  if (this.isModified("password"))
+    this.password = await bcrypt.hash(this.password, 4);
 }); //this "this" means the User object
 
 const User = mongoose.model("User", userSchema);
