@@ -26,6 +26,7 @@ app.use(
 ); //router 앞에 위치
 app.use(localsMiddleware); //session 뒤에 위치해야 local로 session 정보를 가져올 수 있다.
 app.use("/uploads", express.static("uploads"));
+app.use("/assets", express.static("assets"));
 app.use("/", globalRouter);
 app.use("/user", userRouter);
 app.use("/video", videoRouter);

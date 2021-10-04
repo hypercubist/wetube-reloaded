@@ -201,7 +201,7 @@ export const postChangePassword = async (req, res) => {
   return res.redirect("/user/logout");
 };
 
-export const see = (req, res) => {
+export const see = async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id).populate("videos");
   if (!user) {
