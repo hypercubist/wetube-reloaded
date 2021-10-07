@@ -17,3 +17,7 @@
 
 /videos/comments -> Comment on a Video
 /videos/comments/delete -> Delete A Comment of a Video
+
+> video player time lange
+> video player keybord shortcut
+> video player onclick play/pause event
