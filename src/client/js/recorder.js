@@ -74,34 +74,35 @@ const handleDownload = async () => {
   startBtn.addEventListener("click", handleStart);
 };
 
-const handleStop = () => {
-  startBtn.innerText = "Download Recording";
-  startBtn.removeEventListener("click", handleStop);
-  startBtn.addEventListener("click", handleDownload);
-
-  recorder.stop();
-};
-
 const handleStart = () => {
-  startBtn.innerText = "Stop Recording";
+  startBtn.innerText = "Recording";
+  startBtn.disabled = true;
   startBtn.removeEventListener("click", handleStart);
-  startBtn.addEventListener("click", handleStop);
 
-  recorder = new MediaRecorder(stream);
+  recorder = new MediaRecorder(stream, { mimeType: "video/webm" });
   recorder.ondataavailable = (event) => {
     videoFile = URL.createObjectURL(event.data);
     video.srcObject = null;
     video.src = videoFile;
     video.loop = true;
     video.play();
+    startBtn.innerText = "Download";
+    startBtn.disabled = false;
+    startBtn.addEventListener("click", handleDownload);
   };
   recorder.start();
+  setTimeout(() => {
+    recorder.stop();
+  }, 6000);
 };
 
 const init = async () => {
   stream = await navigator.mediaDevices.getUserMedia({
     audio: true,
-    video: true,
+    video: {
+      width: 540,
+      height: 960,
+    },
   });
   video.srcObject = stream;
   video.play();
