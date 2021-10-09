@@ -35,3 +35,9 @@ export const videoUpload = multer({
     fileSize: 40000000,
   },
 });
+
+export const coopcoep = (req, res, next) => {
+  res.header("Cross-Origin-Embedder-Policy", "require-corp");
+  res.header("Cross-Origin-Opener-Policy", "same-origin");
+  next();
+};

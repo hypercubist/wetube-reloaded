@@ -123,7 +123,7 @@ export const search = async (req, res) => {
 export const countView = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id);
-  if (video) {
+  if (!video) {
     return res.sendStatus(404);
   }
   video.meta.views += 1;

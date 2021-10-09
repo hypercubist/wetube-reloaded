@@ -48,7 +48,7 @@ const handleDownload = async () => {
   // 생성된 file읽기
 
   const mp4Blob = new Blob([mp4File.buffer], { type: "video/mp4" });
-  const thumbBlob = new Blob([thumbFile.buffer], { type: image / jpg });
+  const thumbBlob = new Blob([thumbFile.buffer], { type: "image/jpg" });
   // buffer를 통해 blob file 생성
 
   const mp4Url = URL.createObjectURL(mp4Blob);

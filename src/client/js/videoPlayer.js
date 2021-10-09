@@ -102,12 +102,11 @@ const handleMouseLeave = () => {
 };
 
 const handleVideoEnded = () => {
-  playBtn.innerText = "Play";
-
   const { id } = videoContainer.dataset;
-  fetch(`/api/videos/${id}/view`, {
+  fetch(`/api/video/${id}/view`, {
     method: "POST",
   });
+  playBtnIcon.classList = "fas fa-play";
 };
 
 playBtn.addEventListener("click", handlePlayClick);

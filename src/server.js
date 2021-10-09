@@ -6,7 +6,7 @@ import globalRouter from "./routers/rootRouters";
 import userRouter from "./routers/userRouters";
 import videoRouter from "./routers/videoRouters";
 import apiRouter from "./routers/apiRouter";
-import { localsMiddleware } from "./middlewares";
+import { coopcoep, localsMiddleware } from "./middlewares";
 
 const app = express();
 const logger = morgan("dev");
@@ -15,6 +15,7 @@ app.set("views", process.cwd() + "/src/views");
 app.set("view engine", "pug");
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
+app.use(coopcoep);
 app.use(
   session({
     secret: process.env.COOKIE_SECRET,
