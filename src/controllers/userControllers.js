@@ -12,14 +12,16 @@ export const postJoin = async (req, res) => {
   if (password !== password2) {
     return res.status(400).render("join", {
       pageTitle,
-      errorMessage: "Password confirmation does not match.",
+      errorMessage: "비밀번호가 서로 일치하지 않습니다.",
+      //먼저 입력한 정보를 다시 페이지에 입력시켜두는 기능 추가
     });
   }
   const exists = await User.exists({ $or: [{ username }, { email }] });
   if (exists) {
     return res.status(400).render("join", {
       pageTitle,
-      errorMessage: "This username or email is already taken.",
+      errorMessage: "아이디 또는 이메일이 이미 사용중입니다.",
+      //먼저 입력한 정보를 다시 페이지에 입력시켜두는 기능 추가
     });
   }
   try {
@@ -30,8 +32,10 @@ export const postJoin = async (req, res) => {
       password,
       location,
     });
+    req.flash("success", "가입이 완료되었습니다. 로그인하여 시작하세요:)");
     return res.redirect("/login");
   } catch (error) {
+    req.flash("error", "가입에 실패했습니다. 다시 시도해주세요.");
     return res.status(400).render("join", {
       pageTitle,
       errorMessage: error._message,
@@ -50,18 +54,19 @@ export const postLogin = async (req, res) => {
   if (!user) {
     return res.status(400).render("login", {
       pageTitle,
-      errorMessage: "An account with this username does not exists",
+      errorMessage: "아이디 또는 비밀번호가 잘못되었습니다.",
     });
   }
   const ok = await bcrypt.compare(password, user.password);
   if (!ok) {
     return res.status(400).render("login", {
       pageTitle,
-      errorMessage: "Wrong password",
+      errorMessage: "아이디 또는 비밀번호가 잘못되었습니다.",
     });
   }
   req.session.loggedIn = true;
   req.session.user = user;
+  req.flash("success", "로그인 성공:)");
   return res.redirect("/");
 };
 
