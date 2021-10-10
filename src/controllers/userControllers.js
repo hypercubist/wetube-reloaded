@@ -1,6 +1,7 @@
 import User from "../models/User";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
+import flash from "express-flash";
 
 export const getJoin = (req, res) => {
   res.render("join", { pageTitle: "Create Account" });
@@ -10,17 +11,17 @@ export const postJoin = async (req, res) => {
   const pageTitle = "Join";
   const { name, username, email, password, password2, location } = req.body;
   if (password !== password2) {
+    req.flash("error", "비밀번호가 서로 일치하지 않습니다.");
     return res.status(400).render("join", {
       pageTitle,
-      errorMessage: "비밀번호가 서로 일치하지 않습니다.",
       //먼저 입력한 정보를 다시 페이지에 입력시켜두는 기능 추가
     });
   }
   const exists = await User.exists({ $or: [{ username }, { email }] });
   if (exists) {
+    req.flash("error", "아이디 또는 이메일이 이미 사용중입니다.");
     return res.status(400).render("join", {
       pageTitle,
-      errorMessage: "아이디 또는 이메일이 이미 사용중입니다.",
       //먼저 입력한 정보를 다시 페이지에 입력시켜두는 기능 추가
     });
   }
@@ -38,7 +39,6 @@ export const postJoin = async (req, res) => {
     req.flash("error", "가입에 실패했습니다. 다시 시도해주세요.");
     return res.status(400).render("join", {
       pageTitle,
-      errorMessage: error._message,
     });
   }
 };
@@ -52,16 +52,16 @@ export const postLogin = async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ username, socialOnly: false });
   if (!user) {
+    req.flash("error", "아이디 또는 비밀번호가 잘못되었습니다.");
     return res.status(400).render("login", {
       pageTitle,
-      errorMessage: "아이디 또는 비밀번호가 잘못되었습니다.",
     });
   }
   const ok = await bcrypt.compare(password, user.password);
   if (!ok) {
+    req.flash("error", "아이디 또는 비밀번호가 잘못되었습니다.");
     return res.status(400).render("login", {
       pageTitle,
-      errorMessage: "아이디 또는 비밀번호가 잘못되었습니다.",
     });
   }
   req.session.loggedIn = true;
@@ -119,6 +119,10 @@ export const finishGithubLogin = async (req, res) => {
       (email) => email.primary === true && email.verified === true
     );
     if (!emailObj) {
+      req.flash(
+        "error",
+        "이메일 정보를 불러오지 못했습니다:( 다시 로그인해주세요."
+      );
       return res.redirect("/login");
     }
     let user = await User.findOne({ email: emailObj.email });
@@ -135,8 +139,10 @@ export const finishGithubLogin = async (req, res) => {
     }
     req.session.loggedIn = true;
     req.session.user = user;
+    req.flash("success", "로그인 성공:)");
     return res.redirect("/");
   } else {
+    req.flash("error", "로그인에 실패했습니다:( 다시 로그인 해주세요.");
     return res.redirect("/login");
   }
 };
@@ -172,6 +178,7 @@ export const postEdit = async (req, res) => {
     }
   );
   req.session.user = updateUser;
+  req.flash("success", "프로필이 업데이트되었습니다.");
   return res.redirect("/user/edit");
 };
 
@@ -188,20 +195,21 @@ export const postChangePassword = async (req, res) => {
   const user = await User.findById(_id);
   const ok = await bcrypt.compare(oldPassword, user.password);
   if (!ok) {
+    req.flash("error", "잘못된 비밀번호입니다.");
     return res.status(400).render("change-password", {
       pageTitle: "Change Password",
-      errorMessage: "Wrong password",
     });
   }
   if (newPassword !== newPassword2) {
+    req.flash("error", "비밀번호가 서로 일치하지 않습니다.");
     return res.status(400).render("change-password", {
       pageTitle: "Change password",
-      errorMessage: "Password confirmation does not match.",
     });
   }
   user.password = newPassword;
   await user.save(); //save를 작동시켜야 bcrypt hash가 적용됨(userSchema.pre)
   //send notification
+  req.flash("info", "비밀번호가 변경되었습니다. 다시 로그인 해주세요.");
   return res.redirect("/user/logout");
 };
 
