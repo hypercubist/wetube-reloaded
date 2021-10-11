@@ -21,5 +21,4 @@
 > video player time lange
 > video player keybord shortcut
 > video player onclick play/pause event
-
-git test
+> delete comment (fetch req, api route,controller, user check)
