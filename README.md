@@ -8,7 +8,6 @@
 /users/:id/ -> See user
 /users/logout -> Log Out
 /users/edit -> Edit My Profile
-/users/remove -> remove My profile
 
 /videos/:id -> See Video
 /videos/:id/edit -> Edit Video
@@ -22,3 +21,4 @@
 > video player keybord shortcut
 > video player onclick play/pause event
 > delete comment (fetch req, api route,controller, user check)
+> password rules

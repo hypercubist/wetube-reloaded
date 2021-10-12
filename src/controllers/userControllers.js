@@ -4,11 +4,11 @@ import bcrypt from "bcrypt";
 import flash from "express-flash";
 
 export const getJoin = (req, res) => {
-  res.render("join", { pageTitle: "Create Account" });
+  res.render("join", { pageTitle: "회원 가입" });
 };
 
 export const postJoin = async (req, res) => {
-  const pageTitle = "Join";
+  const pageTitle = "회원 가입";
   const { name, username, email, password, password2, location } = req.body;
   if (password !== password2) {
     req.flash("error", "비밀번호가 서로 일치하지 않습니다.");
@@ -44,11 +44,11 @@ export const postJoin = async (req, res) => {
 };
 
 export const getLogin = (req, res) => {
-  res.render("login", { pageTitle: "Login" });
+  res.render("login", { pageTitle: "로그인" });
 };
 
 export const postLogin = async (req, res) => {
-  const pageTitle = "Login";
+  const pageTitle = "로그인";
   const { username, password } = req.body;
   const user = await User.findOne({ username, socialOnly: false });
   if (!user) {
@@ -153,7 +153,7 @@ export const logout = (req, res) => {
 };
 
 export const getEdit = (req, res) => {
-  res.render("edit-profile", { pageTitle: "Edit Profile" });
+  res.render("edit-profile", { pageTitle: "프로필 업데이트" });
 };
 
 export const postEdit = async (req, res) => {
@@ -197,13 +197,13 @@ export const postChangePassword = async (req, res) => {
   if (!ok) {
     req.flash("error", "잘못된 비밀번호입니다.");
     return res.status(400).render("change-password", {
-      pageTitle: "Change Password",
+      pageTitle: "비밀번호 변경",
     });
   }
   if (newPassword !== newPassword2) {
     req.flash("error", "비밀번호가 서로 일치하지 않습니다.");
     return res.status(400).render("change-password", {
-      pageTitle: "Change password",
+      pageTitle: "비밀번호 변경",
     });
   }
   user.password = newPassword;
@@ -213,7 +213,7 @@ export const postChangePassword = async (req, res) => {
   return res.redirect("/user/logout");
 };
 
-export const see = async (req, res) => {
+export const profile = async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id).populate({
     path: "videos",
@@ -227,5 +227,3 @@ export const see = async (req, res) => {
   }
   return res.render("profile", { pageTitle: user.name, user });
 };
-
-export const remove = (req, res) => res.send("remove user");

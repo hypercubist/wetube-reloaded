@@ -71,16 +71,23 @@ const handleTimelineChange = (event) => {
   video.currentTime = value;
 };
 
-const handleFullScreen = () => {
+const handleFullScreenClick = () => {
   const fullScreen = document.fullscreenElement;
   if (fullScreen) {
     document.exitFullscreen();
-    fullScreenIcon.classList = "fas fa-expand";
   } else {
     videoContainer.requestFullscreen();
-    fullScreenIcon.classList = "fas fa-compress";
   }
 };
+
+const handleFullScreenChange =()=>{
+  const fullScreen = document.fullscreenElement;
+  if(fullScreen){
+    fullScreenIcon.classList = "fas fa-expand";
+  }else{
+    fullScreenIcon.classList = "fas fa-compress";
+  }
+}
 
 const hideControls = () => videoControls.classList.remove("showing");
 
@@ -109,13 +116,24 @@ const handleVideoEnded = () => {
   playBtnIcon.classList = "fas fa-play";
 };
 
+const handleKeyDown =(event)=>{
+  if(event.key === "f"){
+    video.requestFullscreen();
+  }else if(event.key === "escape"){
+    document.exitFullscreen();
+  }else if(event.key === "space"){
+    handlePlayClick();//event넘겨줘야하는지?
+  }else return;
+}
+
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMute);
 volumeRange.addEventListener("input", handleVolumeChange);
 video.addEventListener("loadeddata", handleLoadedData);
 video.addEventListener("timeupdate", handleTimeUpdate);
 timeline.addEventListener("input", handleTimelineChange);
-fullScreenBtn.addEventListener("click", handleFullScreen);
+fullScreenBtn.addEventListener("click", handleFullScreenClick);
 videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
 video.addEventListener("ended", handleVideoEnded);
+video.addEventListener("keydown", handleKeyDown)

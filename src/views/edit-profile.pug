@@ -4,11 +4,11 @@ block content
     form(method="POST", enctype="multipart/form-data").edit-profile__form
         label(for="avatar") Avatar
         input(type="file", id="avatar", name="avatar", accept="image/*")
-        input(placeholder="Name", name="name", type="text", required, value=loggedInUser.name)
-        input(placeholder="User Name", name="username", type="text", required, value=loggedInUser.username)
-        input(placeholder="Email", name="email", type="email", required, value=loggedInUser.email)
-        input(placeholder="Location", name="location", type="text", required, value=loggedInUser.location)
-        input(type="submit", value="Update Profile")
+        input(placeholder="이름", name="name", type="text", required, value=loggedInUser.name)
+        input(placeholder="아이디", name="username", type="text", required, value=loggedInUser.username)
+        input(placeholder="이메일", name="email", type="email", required, value=loggedInUser.email)
+        input(placeholder="지역", name="location", type="text", required, value=loggedInUser.location)
+        input(type="submit", value="프로필 업데이트")
         if !loggedInUser.socialOnly
             div.edit-profile__password
-                a(href="change-password") Change Password &rarr;
+                a(href="change-password") 비밀번호 변경하기 &rarr;
