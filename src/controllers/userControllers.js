@@ -66,7 +66,7 @@ export const postLogin = async (req, res) => {
   }
   req.session.loggedIn = true;
   req.session.user = user;
-  req.flash("success", "로그인 성공:)");
+  req.flash("success", "로그인 성공 :)");
   return res.redirect("/");
 };
 
