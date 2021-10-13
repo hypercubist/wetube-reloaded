@@ -102,7 +102,7 @@ const init = async () => {
     video: {
       width: 540,
       height: 960,
-    },
+    },//device가 준비되지 않은 경우 예외처리해야함
   });
   video.srcObject = stream;
   video.play();
