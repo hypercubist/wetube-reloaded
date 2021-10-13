@@ -17,7 +17,6 @@ app.set("view engine", "pug");
 app.use(logger);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(coopcoep);
 app.use(
   session({
     secret: process.env.COOKIE_SECRET,
@@ -30,7 +29,7 @@ app.use(
 ); //router 앞에 위치
 app.use(flash());
 app.use(localsMiddleware); //session 뒤에 위치해야 local로 session 정보를 가져올 수 있다.
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", coopcoep, express.static("uploads"));
 app.use("/assets", express.static("assets"));
 app.use("/", globalRouter);
 app.use("/user", userRouter);

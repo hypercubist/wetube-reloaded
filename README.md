@@ -22,3 +22,4 @@
 > video player onclick play/pause event
 > delete comment (fetch req, api route,controller, user check)
 > password rules
+> recording device not found error

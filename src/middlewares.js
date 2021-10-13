@@ -54,14 +54,14 @@ export const avatarUpload = multer({
   limits: {
     fileSize: 3145728, //3mb
   },
-  storage: isHeroku ? S3ImageUploader : undefined,
+  storage: S3ImageUploader,
 });
 export const videoUpload = multer({
   dest: "uploads/videos/",
   limits: {
     fileSize: 104857600, //100mb
   },
-  storage: isHeroku ? S3VideoUploader : undefined,
+  storage: S3VideoUploader,
 });
 
 export const coopcoep = (req, res, next) => {
