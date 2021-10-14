@@ -97,7 +97,7 @@ const handleStart = () => {
 };
 
 const init = async () => {
-  try{
+  try {
     stream = await navigator.mediaDevices.getUserMedia({
       audio: true,
       video: {
@@ -105,13 +105,14 @@ const init = async () => {
         height: 960,
       },
     });
-  }catch(err){
-    alert("비디오 녹화 장치를 찾을 수 없거나 현재 사용이 불가한 상태입니다. 장치를 확인 후 새로고침해주세요.")
+    video.srcObject = stream;
+    video.play();
+  } catch (err) {
+    alert(
+      "비디오 녹화 장치를 찾을 수 없거나 현재 사용이 불가한 상태입니다. 장치를 확인 후 새로고침해주세요."
+    );
     startBtn.disabled = true;
   }
-  
-  video.srcObject = stream;
-  video.play();
 };
 
 init();

@@ -23,3 +23,4 @@
 > delete comment (fetch req, api route,controller, user check)
 > password rules
 > recording device not found error
+> edit video page check

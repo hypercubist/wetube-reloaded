@@ -1,6 +1,7 @@
 import multer from "multer";
 import multerS3 from "multer-s3";
 import aws from "aws-sdk";
+import vars from "./vars";
 
 const s3 = new aws.S3({
   credentials: {
@@ -28,6 +29,7 @@ export const localsMiddleware = (req, res, next) => {
   res.locals.siteName = "Wetube";
   res.locals.loggedInUser = req.session.user || {};
   res.locals.isHeroku = isHeroku;
+  res.locals.vars = vars;
   next();
 };
 

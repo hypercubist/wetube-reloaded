@@ -6,7 +6,7 @@ block content
         if (user.avatarUrl)
             img.avatar(src=user.avatarUrl)
         else
-            img.avatar(src="https://mdtube.s3.ap-northeast-2.amazonaws.com/defaults/default_avatar.jpg")
+            img.avatar(src=vars.URLs.avatarImg)
         h3=user.name
     div.video-grid
         each video in user.videos

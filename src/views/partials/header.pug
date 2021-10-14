@@ -18,7 +18,7 @@ header
                         if (loggedInUser.avatarUrl)
                             img.header__avatar(src=loggedInUser.avatarUrl)
                         else
-                            img.header__avatar(src="https://mdtube.s3.ap-northeast-2.amazonaws.com/defaults/default_avatar.jpg")
+                            img.header__avatar(src=vars.URLs.avatarImg)
             else
                 li
                     a(href="/login") Log In
