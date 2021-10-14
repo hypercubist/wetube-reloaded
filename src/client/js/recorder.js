@@ -97,13 +97,19 @@ const handleStart = () => {
 };
 
 const init = async () => {
-  stream = await navigator.mediaDevices.getUserMedia({
-    audio: true,
-    video: {
-      width: 540,
-      height: 960,
-    },//device가 준비되지 않은 경우 예외처리해야함
-  });
+  try{
+    stream = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: {
+        width: 540,
+        height: 960,
+      },
+    });
+  }catch(err){
+    alert("비디오 녹화 장치를 찾을 수 없거나 현재 사용이 불가한 상태입니다. 장치를 확인 후 새로고침해주세요.")
+    startBtn.disabled = true;
+  }
+  
   video.srcObject = stream;
   video.play();
 };

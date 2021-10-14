@@ -1,8 +1,8 @@
 const video = document.querySelector("video");
 const playBtn = document.getElementById("play");
 const playBtnIcon = playBtn.querySelector("i");
-const muteBtn = document.getElementById("mute");
-const muteBtnIcon = muteBtn.querySelector("i");
+const volumeBtn = document.getElementById("mute");
+const volumeBtnIcon = volumeBtn.querySelector("i");
 const currentTime = document.getElementById("currentTime");
 const totalTime = document.getElementById("totalTime");
 const volumeRange = document.getElementById("volume");
@@ -29,26 +29,29 @@ const handlePlayClick = (e) => {
 const handleMute = (e) => {
   if (video.muted) {
     video.muted = false;
+    volumeRange.value = volumeValue
+    volumeBtn.className = "fas fa-volume-up";
   } else {
     video.muted = true;
+    volumeRange.value = 0;
+    volumeBtn.className = "fas fa-volume-mute"
   }
-  muteBtnIcon.classList = video.muted
-    ? "fas fa-volume-mute"
-    : "fas fa-volume-up";
-  volumeRange.value = video.muted ? 0 : volumeValue;
 };
 
-const handleVolumeChange = (event) => {
+const handleVolume = (event) => {
   const {
     target: { value },
   } = event;
   if (video.muted) {
     video.muted = false;
+    volumeBtn.className = "fas fa-volume-mute"
   }
-  muteBtnIcon.classList =
-    value === "0" ? "fas fa-volume-mute" : "fas fa-volume-up";
-  volumeValue = value;
-  video.volume = value;
+  if(value ==="0"){
+    volumeBtn.className = "fas fa-volume-off";
+  }else{
+    volumeBtn.className = "fas fa-volume-up";
+  }
+  video.volume = volumeValue = value;
 };
 
 const formatTime = (seconds) =>
@@ -127,8 +130,8 @@ const handleKeyDown =(event)=>{
 }
 
 playBtn.addEventListener("click", handlePlayClick);
-muteBtn.addEventListener("click", handleMute);
-volumeRange.addEventListener("input", handleVolumeChange);
+volumeBtn.addEventListener("click", handleMute);
+volumeRange.addEventListener("input", handleVolume);
 video.addEventListener("loadeddata", handleLoadedData);
 video.addEventListener("timeupdate", handleTimeUpdate);
 timeline.addEventListener("input", handleTimelineChange);
