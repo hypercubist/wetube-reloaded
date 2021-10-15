@@ -7,17 +7,19 @@ import {
   postEdit,
   deleteVideo,
 } from "../controllers/videoControllers";
-import { protectorMiddleware, videoUpload } from "../middlewares";
+import { coopcoep, protectorMiddleware, videoUpload } from "../middlewares";
 
 const videoRouter = express.Router();
 
 videoRouter.get("/:id([0-9a-f]{24})", watch);
 videoRouter
   .route("/upload")
+  .all(coopcoep)
   .all(protectorMiddleware) //로그인해야 업로드가능
   .get(getUpload)
   .post(
-    videoUpload.fields([ //
+    videoUpload.fields([
+      //
       { name: "video", maxCount: 1 },
       { name: "thumb", maxCount: 1 },
     ]),

@@ -7,7 +7,7 @@ import globalRouter from "./routers/rootRouters";
 import userRouter from "./routers/userRouters";
 import videoRouter from "./routers/videoRouters";
 import apiRouter from "./routers/apiRouter";
-import { coopcoep, localsMiddleware } from "./middlewares";
+import { localsMiddleware } from "./middlewares";
 
 const app = express();
 const logger = morgan("dev");
@@ -29,7 +29,7 @@ app.use(
 ); //router 앞에 위치
 app.use(flash());
 app.use(localsMiddleware); //session 뒤에 위치해야 local로 session 정보를 가져올 수 있다.
-app.use("/uploads", coopcoep, express.static("uploads"));
+app.use("/uploads", express.static("uploads"));
 app.use("/assets", express.static("assets"));
 app.use("/", globalRouter);
 app.use("/user", userRouter);
