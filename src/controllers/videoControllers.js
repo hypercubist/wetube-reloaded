@@ -159,11 +159,18 @@ export const createComment = async (req, res) => {
   const comment = await Comment.create({
     text,
     owner: user._id,
+    ownerName: user.username,
     video: id,
   });
   video.comments.push(comment._id);
   video.save();
-  user.comments.push(comment._id);
-  user.save();
-  return res.status(201).json({ newCommentId: comment._id });
+  return res
+    .status(201)
+    .json({ newCommentId: comment._id, ownerName: comment.ownerName });
 };
+
+// export const deleteComment = async(req, res)=>{
+//   const {
+
+//   }
+// }
