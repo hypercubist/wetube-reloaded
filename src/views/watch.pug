@@ -37,9 +37,10 @@ block content
         ul
             each comment in video.comments.reverse()
                 li.video__comment(data-id=comment.id)
-                    div #{comment.ownerName}
-                    span #{comment.text}
-                    span ✖
+                    span #{comment.ownerName}
+                    div #{comment.text}
+                    span.video__comment-edit 수정
+                    span.video__comment-delete 삭제
 block scripts
     script(src="/assets/js/videoPlayer.js")
     if(loggedIn)
