@@ -17,7 +17,10 @@ let controlsTimeout = null;
 let controlsMovementTimeout = null;
 video.volume = volumeValue;
 
-const handlePlayClick = (e) => {
+const formatTime = (seconds) =>
+  new Date(seconds * 1000).toISOString().substr(14, 5);
+
+const togglePlay = (e) => {
   if (video.paused) {
     video.play();
   } else {
@@ -26,7 +29,7 @@ const handlePlayClick = (e) => {
   playBtnIcon.classList = video.paused ? "fas fa-play" : "fas fa-pause";
 };
 
-const handleMute = (e) => {
+const toggleMute = (e) => {
   if (video.muted) {
     video.muted = false;
     volumeRange.value = volumeValue;
@@ -38,24 +41,37 @@ const handleMute = (e) => {
   }
 };
 
-const handleVolume = (event) => {
+const handlePlayBtn = (e) => {
+  togglePlay(e);
+};
+
+const handleVideoClick = (e) => {
+  togglePlay(e);
+};
+
+const handleVolumeBtn = (e) => {
+  toggleMute(e);
+};
+
+const handleVolumeRange = (e) => {
   const {
     target: { value },
-  } = event;
+  } = e;
+  video.volume = volumeValue = value;
+};
+
+const handleVolumeChange = (e) => {
+  console.log(video.volume);
   if (video.muted) {
     video.muted = false;
     volumeBtnIcon.classList = "fas fa-volume-mute";
   }
-  if (value === "0") {
+  if (video.volume === 0) {
     volumeBtnIcon.classList = "fas fa-volume-off";
   } else {
     volumeBtnIcon.classList = "fas fa-volume-up";
   }
-  video.volume = volumeValue = value;
 };
-
-const formatTime = (seconds) =>
-  new Date(seconds * 1000).toISOString().substr(14, 5);
 
 const handleLoadedData = () => {
   totalTime.innerText = formatTime(Math.floor(video.duration));
@@ -67,11 +83,19 @@ const handleTimeUpdate = () => {
   timeline.value = Math.floor(video.currentTime);
 };
 
-const handleTimelineChange = (event) => {
+const handleTimelineChange = (e) => {
   const {
     target: { value },
-  } = event;
+  } = e;
   video.currentTime = value;
+};
+
+const handleVideoEnded = () => {
+  const { id } = videoContainer.dataset;
+  fetch(`/api/video/${id}/view`, {
+    method: "POST",
+  });
+  playBtnIcon.classList = "fas fa-play";
 };
 
 const handleFullScreenClick = () => {
@@ -111,33 +135,60 @@ const handleMouseLeave = () => {
   controlsTimeout = setTimeout(hideControls, 3000);
 };
 
-const handleVideoEnded = () => {
-  const { id } = videoContainer.dataset;
-  fetch(`/api/video/${id}/view`, {
-    method: "POST",
-  });
-  playBtnIcon.classList = "fas fa-play";
+const handleKeyDown = (e) => {
+  if (e.target.nodeName === "BODY") {
+    switch (e.keyCode) {
+      case 70: //F
+        video.requestFullscreen();
+        break;
+      case 32: //space
+        togglePlay(e);
+        break;
+      case 77: //M
+        toggleMute(e);
+        break;
+      case 38: //↑
+        e.preventDefault();
+        if (video.volume < 1) {
+          video.volume = (video.volume * 10 + 1) / 10;
+          volumeValue = volumeRange.value = video.volume;
+        }
+        break;
+      case 40: //↓
+        e.preventDefault();
+        if (video.volume > 0) {
+          video.volume = (video.volume * 10 - 1) / 10;
+          volumeValue = volumeRange.value = video.volume;
+        }
+        break;
+      case 37: //←
+        e.preventDefault();
+        video.currentTime -= 1;
+        timeline.value -= 1;
+        break;
+      case 39: //→
+        e.preventDefault();
+        video.currentTime += 1;
+        timeline.value += 1;
+        break;
+      default:
+        return;
+    }
+  }
 };
 
-const handleKeyDown = (event) => {
-  if (event.key === "f") {
-    video.requestFullscreen();
-  } else if (event.key === "escape") {
-    document.exitFullscreen();
-  } else if (event.key === "space") {
-    handlePlayClick(); //event넘겨줘야하는지?
-  } else return;
-};
-
-playBtn.addEventListener("click", handlePlayClick);
-volumeBtn.addEventListener("click", handleMute);
-volumeRange.addEventListener("input", handleVolume);
+playBtn.addEventListener("click", handlePlayBtn);
+video.addEventListener("click", handleVideoClick);
+volumeBtn.addEventListener("click", handleVolumeBtn);
+video.addEventListener("volumechange", handleVolumeChange);
+volumeRange.addEventListener("input", handleVolumeRange);
 video.addEventListener("loadeddata", handleLoadedData);
-video.addEventListener("timeupdate", handleTimeUpdate);
 timeline.addEventListener("input", handleTimelineChange);
+video.addEventListener("timeupdate", handleTimeUpdate);
+video.addEventListener("ended", handleVideoEnded);
 fullScreenBtn.addEventListener("click", handleFullScreenClick);
+document.addEventListener("fullscreenchange", handleFullScreenChange);
 videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
-video.addEventListener("ended", handleVideoEnded);
-video.addEventListener("keydown", handleKeyDown);
-document.addEventListener("fullscreenchange", handleFullScreenChange);
+
+document.addEventListener("keydown", handleKeyDown);
