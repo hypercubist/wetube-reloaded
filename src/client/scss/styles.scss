@@ -57,19 +57,19 @@ main {
   left: 0;
   right: 0;
   margin: 0 auto;
-  max-width: 200px;
-  padding: 20px;
-  border-radius: 10000px;
+  max-width: 400px;
+  padding: 15px;
+  border-radius: 30px;
   text-align: center;
   animation: goAway 0.5s ease-in-out forwards;
-  animation-delay: 7s;
+  animation-delay: 4s;
   &.error {
     background-color: tomato;
     color: white;
   }
   &.success {
-    background-color: greenyellow;
-    color: royalblue;
+    background-color: rgb(41, 223, 41);
+    color: rgb(19, 30, 92);
   }
   &.info {
     background-color: beige;

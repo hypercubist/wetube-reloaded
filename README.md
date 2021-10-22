@@ -17,8 +17,8 @@
 /videos/comments -> Comment on a Video
 /videos/comments/delete -> Delete A Comment of a Video
 
-> video player time lange
-> video player keybord shortcut
+> video player time range
+> video player keyboard shortcut
 > video player onclick play/pause event
 > delete comment (fetch req, api route,controller, user check)
 > password rules

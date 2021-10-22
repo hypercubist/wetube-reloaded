@@ -11,21 +11,28 @@ const addComment = (text, id, ownerName) => {
   span.innerText = ownerName;
   const div = document.createElement("div");
   div.innerText = ` ${text}`;
+  const hr = document.createElement("hr");
+  const div2 = document.createElement("div");
+  div2.className = "video__comment-btn";
   const span2 = document.createElement("span");
   span2.innerText = "수정";
+  span2.className = "video__comment-edit";
   const span3 = document.createElement("span");
   span3.innerText = "삭제";
+  span3.className = "video__comment-delete";
   newComment.appendChild(span);
   newComment.appendChild(div);
-  newComment.appendChild(span2);
-  newComment.appendChild(span3);
+  newComment.appendChild(hr);
+  div2.appendChild(span2);
+  div2.appendChild(span3);
+  newComment.appendChild(div2);
   videoComments.prepend(newComment);
   span3.addEventListener("click", handleClickDelete);
 };
 
 const handleClickDelete = async (event) => {
   const videoId = videoContainer.dataset.id;
-  const comment = event.target.parentNode;
+  const comment = event.target.parentNode.parentNode;
   const commentId = comment.dataset.id;
 
   const response = await fetch(`/api/video/${videoId}/comment`, {
@@ -42,7 +49,7 @@ const handleClickDelete = async (event) => {
 
 const handleSubmit = async (event) => {
   event.preventDefault();
-  const textarea = form.querySelector("textarea");
+  const textarea = form.querySelector("input");
   const text = textarea.value;
   const videoId = videoContainer.dataset.id;
   if (text === "") {

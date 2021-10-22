@@ -21,26 +21,33 @@ block content
                     i.fas.fa-expand
     div.video__data
         p.video__title=video.title
-        small.video__owner Uploaded by 
+        div
+            small.video__views 조회수 #{video.meta.views}회 • 
+            small.video__createdAt=new Date(video.createdAt).toLocaleDateString("ko-kr", { year: 'numeric', month: 'long', day: 'numeric'})
+        small.video__owner
             a(href=`/user/${video.owner._id}`)=video.owner.name
-        small.video__createdAt=new Date(video.createdAt).toLocaleDateString("ko-kr", {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
-        if String(video.owner._id) === String(loggedInUser._id)
-            a(href=`${video.id}/edit`) Edit Video &rarr;
-            br
-            a(href=`${video.id}/delete`) Delete Video &rarr;
+        div.video__edit
+            if String(video.owner._id) === String(loggedInUser._id)
+                small
+                    a(href=`${video.id}/edit`) 동영상 편집
+                small
+                    a(href=`${video.id}/delete`) 동영상 삭제
     if loggedIn
         div.video__add-comments
             form.video__comment-form#commentForm
-                textarea(cols="50", rows="1", placeholder="공개 댓글 추가")
-                button 댓글
+                input(type="text" placeholder="공개 댓글 추가")
+                input(type="submit" value="댓글")
     div.video__comments
         ul
             each comment in video.comments.reverse()
                 li.video__comment(data-id=comment.id)
                     span #{comment.ownerName}
                     div #{comment.text}
-                    span.video__comment-edit 수정
-                    span.video__comment-delete 삭제
+                    hr
+                    if String(comment.owner._id) === String(loggedInUser._id)
+                        div.video__comment-btn
+                            span.video__comment-edit 수정
+                            span.video__comment-delete 삭제
 block scripts
     script(src="/assets/js/videoPlayer.js")
     if(loggedIn)

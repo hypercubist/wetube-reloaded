@@ -61,7 +61,6 @@ const handleVolumeRange = (e) => {
 };
 
 const handleVolumeChange = (e) => {
-  console.log(video.volume);
   if (video.muted) {
     video.muted = false;
     volumeBtnIcon.classList = "fas fa-volume-mute";
@@ -161,16 +160,14 @@ const handleKeyDown = (e) => {
           volumeValue = volumeRange.value = video.volume;
         }
         break;
-      case 37: //←
-        e.preventDefault();
-        video.currentTime -= 1;
-        timeline.value -= 1;
-        break;
-      case 39: //→
-        e.preventDefault();
-        video.currentTime += 1;
-        timeline.value += 1;
-        break;
+      // case 37: //←
+      //   e.preventDefault();
+      //   timeline.value -= 2;
+      //   break;
+      // case 39: //→
+      //   e.preventDefault();
+      //   timeline.value += 2;
+      //   break;
       default:
         return;
     }
@@ -190,5 +187,4 @@ fullScreenBtn.addEventListener("click", handleFullScreenClick);
 document.addEventListener("fullscreenchange", handleFullScreenChange);
 videoContainer.addEventListener("mousemove", handleMouseMove);
 videoContainer.addEventListener("mouseleave", handleMouseLeave);
-
 document.addEventListener("keydown", handleKeyDown);
