@@ -174,6 +174,9 @@ const handleKeyDown = (e) => {
   }
 };
 
+const init = () => {
+  video.load();
+};
 playBtn.addEventListener("click", handlePlayBtn);
 video.addEventListener("click", handleVideoClick);
 volumeBtn.addEventListener("click", handleVolumeBtn);
