@@ -73,6 +73,7 @@ const handleVolumeChange = (e) => {
 };
 
 const handleLoadedData = () => {
+  console.log("video is loaded");
   totalTime.innerText = formatTime(Math.floor(video.duration));
   timeline.max = Math.floor(video.duration);
 };
