@@ -175,11 +175,9 @@ const handleKeyDown = (e) => {
   }
 };
 
-const init = () => {
-  if (video.readyState == 4) {
-    handleLoadedData();
-  }
-};
+if (video.readyState == 4) {
+  handleLoadedData();
+}
 
 playBtn.addEventListener("click", handlePlayBtn);
 video.addEventListener("click", handleVideoClick);
